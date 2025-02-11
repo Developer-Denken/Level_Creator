@@ -127,12 +127,12 @@ canvas.addEventListener("mousemove", function(e) {
         childBlock.initialX = childBlock.x - block.x;
         childBlock.initialY = childBlock.y - block.y;
 
-        childBlock.x = mouseX + childBlock.initialX;
-        childBlock.y = mouseY + childBlock.initialY;
+        childBlock.x = Math.floor((mouseX + childBlock.initialX)/4)*4;
+        childBlock.y = Math.floor((mouseY + childBlock.initialY)/4)*4;
     }
 
-    block.x = mouseX;
-    block.y = mouseY;
+    block.x = Math.floor(mouseX/4)*4;
+    block.y = Math.floor(mouseY/4)*4;
 
     renderBlocks();
 });
@@ -160,13 +160,13 @@ function pointInBox(x, y, bx, by, bw, bh) {
 let children = [...contextMenu.children];
 
 function createNewBlock(e) {
-    let newBlock = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y-canvas.getBoundingClientRect().top+cameraPosition.y, 50, 50);
+    let newBlock = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y-canvas.getBoundingClientRect().top+cameraPosition.y, 64, 64);
     blocks.push(newBlock);
     renderBlocks();
 }
 
 function createNewSpawnPoint(e) {
-    let newSpawnPoint = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 50, 50);
+    let newSpawnPoint = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 64, 64);
     newSpawnPoint.type = "spawnpoint";
     newSpawnPoint.color = "#9CCC65";
     blocks.push(newSpawnPoint);
@@ -176,14 +176,14 @@ function createNewSpawnPoint(e) {
 let swapButtonCount = 0;
 
 function createNewSwapButton(e) {
-    let newSwapButton = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 100, 20)
+    let newSwapButton = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 128, 24)
     newSwapButton.type = "swapbutton";
     newSwapButton.color = "#FFFF00";
     newSwapButton.hasSwap = "true";
-    newSwapButton.childBlocks.push(new Block(newSwapButton.x + 25, newSwapButton.y - 25, 50, 25));
+    newSwapButton.childBlocks.push(new Block(newSwapButton.x + 32, newSwapButton.y - 32, 64, 32));
     newSwapButton.connection = swapButtonCount+1;
 
-    let newSwapButton2 = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 100, 20)
+    let newSwapButton2 = new Block(lastMousePosition.x-canvas.getBoundingClientRect().left+cameraPosition.x, lastMousePosition.y+cameraPosition.y-canvas.getBoundingClientRect().top, 128, 24)
     newSwapButton2.type = "swapbutton";
     newSwapButton2.color = "#FFFF00";
     newSwapButton2.connection = swapButtonCount;
@@ -212,7 +212,7 @@ for(let i = 0;i<children.length;i++) {
 
 function renderBlocks() {
     paint.fillStyle = "white";
-    paint.fillRect(0, 0, 1600, 900);
+    paint.fillRect(0, 0, 800, 450);
 
     for(let i = 0;i<blocks.length;i++) {
         let block = blocks[i];
@@ -249,8 +249,11 @@ function editCorners(pos, block) {
     let x = block.x + pointPositions[block.stationary][0]*block.width;
     let y = block.y + pointPositions[block.stationary][1]*block.height;
 
-    let corner1 = {x: x, y: y};
+    let corner1 = {x: Math.floor(x/4)*4, y: Math.floor(y/4)*4};
     let corner2 = pos;
+
+    corner2.x = Math.floor(corner2.x / 4) * 4;
+    corner2.y = Math.floor(corner2.y / 4) * 4;
 
     let rect = genRectFromCorners(corner1, corner2);
 
@@ -290,6 +293,15 @@ let typep = document.getElementById("type");
 let orderp = document.getElementById("order");
 let hasSwapp = document.getElementById("hasSwap");
 
+let blockProperties = ["x", "y", "width", "height", "color", "type", "order", "hasSwap"];
+let blockPropertiesElements = [];
+//Need to associate actions with the block properties elements as well
+//Like the switch statement thing below
+
+for(let i = 0;i<blockProperties.length;i++) {
+    blockPropertiesElements.push(document.getElementById(blockProperties[i]));
+}
+
 document.querySelectorAll("input").forEach(item => {
     item.addEventListener("blur", function(e) {
         switch(item.id) {
@@ -326,7 +338,7 @@ document.querySelectorAll("input").forEach(item => {
                 break;
             case "hasSwap":
                 if(item.value == "true" && blocks[selectedBlockIndex].hasSwap != "true") {
-                    blocks[selectedBlockIndex].childBlocks.push(new Block(blocks[selectedBlockIndex].x + 25, blocks[selectedBlockIndex].y - 25, 50, 25));
+                    blocks[selectedBlockIndex].childBlocks.push(new Block(blocks[selectedBlockIndex].x + 32, blocks[selectedBlockIndex].y - 32, 64, 32));
                 } else if(item.value != "true" && blocks[selectedBlockIndex].hasSwap == "true") {
                     blocks[selectedBlockIndex].childBlocks = [];
                 }
@@ -341,6 +353,9 @@ function showBlockProperties() {
     if(selectedBlockIndex == -1) return;
     let block = blocks[selectedBlockIndex];
 
+    hasSwapp.style.visibility = "hidden";
+    orderp.style.visibility = "hidden";
+
     xp.value = block.x;
     yp.value = block.y;
     widthp.value = block.width;
@@ -349,6 +364,14 @@ function showBlockProperties() {
     typep.value = block.type;
     orderp.value = block.order;
     hasSwapp.value = block.hasSwap;
+
+    switch(block.type) {
+        case "block":
+            hasSwapp.style.visibility = "hidden";
+            orderp.style.visibility = "hidden";
+            break;
+    }
+
     blockPropertiesBox.style.visibility = "visible";
 }
 
