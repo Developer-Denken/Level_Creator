@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Level Creator</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="canvasHolder" class="center w-100">
+            <canvas id="levelCanvas" width="1600" height="900"></canvas>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="center w-100">
+            <div id="propertiesBox">
+                <h1>Edit Block Properties</h1>
+                <br>
+                <div>
+                    <h4>Position X:<span class="medium-wide"></span><input id="x" value="0"/></h4>
+                    <h4>Position Y:<span class="medium-wide"></span><input id="y" value="0"/></h4>
+                    <h4>Width:<span class="medium-wide"></span><input id="width" value="0"/></h4>
+                    <h4>Height:<span class="medium-wide"></span><input id="height" value="0"/></h4>
+                    <h4>Color:<span class="medium-wide"></span><input id="color" value="black"/></h4>
+                    <h4>Type:<span class="medium-wide"></span><input id="type" value="block"/></h4>
+                    <h4>Order:<span class="medium-wide"></span><input id="order" value="0"/></h4>
+                    <h4>Has Swap:<span class="medium-wide"></span><input id="hasSwap" value="0"/></h4>
+                    <button id="deleteButton" onclick="deleteBlock()">Delete</button>
+                </div>
+            </div>
+        </div>
+        <div class="center w-100">
+            <button id="save" onclick="save()">Save</button>
+        </div>
+        <div id="context-menu" class="no-highlight">
+            <div class="item">New Block</div>
+            <div class="item">New Spawn Point</div>
+            <div class="item">New Swap Button</div>
+            <div class="item">New Checkpoint</div>
+        </div>
+        <div class="center" id="outputbox">
+            <textarea id="outputBox" rows="25" cols="100"></textarea>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>

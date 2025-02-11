@@ -1,0 +1,95 @@
+#levelCanvas {
+    border:solid black 2px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.w-100 {
+    width:100%;
+}
+
+#canvasHolder {
+    height:1000px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#context-menu {
+    background-color: #ffffff;
+    box-shadow: 0 0 20px rgba(37, 40, 42, 0.22);
+    color: #1f194c;
+    width: 10em;
+    padding: 0.4em 0.3em;
+    font-size: 1.3rem;
+    position: fixed;
+    visibility: hidden;
+}
+
+.item {
+    padding: 0.3em 1.2em;
+}
+
+.item:hover {
+    background-color: rgba(44, 141, 247, 0.2);
+    cursor: pointer;
+}
+
+.no-highlight {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+input {
+    text-align:right;
+    padding:2px;
+    padding-right:5px;
+}
+
+#propertiesBox {
+    text-align:center;
+    border:solid 2px;
+    width:500px;
+    border-radius:25px;
+    visibility:hidden;
+    margin-top:-250px;
+    margin-bottom:20px;
+}
+
+.medium-wide {
+    padding-left:20px;
+}
+
+#save {
+    padding:10px;
+    border-radius:20px;
+    font-size:40px;
+}
+
+#save:hover {
+    background-color:lightgray;
+}
+
+#save:active {
+    background-color:gray;
+}
+
+#outputbox {
+    margin-top:50px;
+    margin-bottom:100px;
+}
+
+#deleteButton {
+    padding:5px;
+    border-radius:20px;
+    margin-bottom:10px;
+    margin-top:10px;
+}
